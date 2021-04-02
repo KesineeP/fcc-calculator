@@ -1,0 +1,79 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(239, 252, 247);
+}
+.container-fluid {
+    height: 100vh;
+    width: 100vw;
+    
+}
+.button-container {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-column: 1/4;
+    grid-row: 1/5;
+    gap: 2px;
+    width: 200px;
+}
+.formular {
+    text-align: end;
+    color: #ffffff;
+    grid-column: 1/5;
+    grid-row: 1/2;
+    font-size: 1rem;
+    margin: 2px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    
+}
+.result {
+    text-align: end;
+    color: #ffffff;
+    grid-column: 1/4;
+    grid-row: 1/2;
+    font-size: 2rem;
+    margin: 2px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+
+.operatorListTop {
+    display: inline-grid;
+    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-column: 1/4;
+    grid-row: 1/2;
+    gap: 2px;
+    grid-template-areas: 
+    "clear clear divide";
+    
+}
+.operatorListRight {
+    display: inline-grid;
+    grid-template-rows: repeat(1, 1fr 1fr 1fr 2fr);
+    grid-template-columns: 1fr;
+    grid-column: 4/5;
+    grid-row: 1/7;
+    gap: 2px;
+}
+
+.numberBtn {
+    display: inline-grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+    "seven eight nine"
+    "four five six"
+    "one two three"
+    "zero zero decimal";
+    grid-column: 1/4;
+    grid-row: 2/7;
+    gap: 2px;
+    margin: 0;
+}
