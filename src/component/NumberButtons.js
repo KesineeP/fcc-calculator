@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 // import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
@@ -11,12 +11,14 @@ const NumberButtons = ({ name, areaName, onClickNumber, id }) => {
     }
     return (
         <Button
+            type="button"
             variant="outline-secondary"
             id={id}
             style={style.default}
+            onClick={() => onClickNumber(name)}
         >
             {name}
-        </Button>
+        </Button >
     )
 }
 // const Buttons = () => {

@@ -24,17 +24,91 @@ const operatorListTop = [["clear", "AC"], ["divide", "/"]];
 const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], ["equals", "="]];
 
 const Calculator = () => {
+    const [value, setValue] = useState('')
     const [result, setResult] = useState(0)
+    const [operation, setOperation] = useState('')
+    const [display, setDisplay] = useState(value)
+    const [lastButtonPressed, setLastButtonPressed] = useState("number");
+    const [formular, setFormular] = useState('')
+
+    const onClickNumber = (num) => {
+        if (num === '0' && value === '0') return null;
+        if (num === '.' && value[value.length - 1] === '.') return;
+
+        if (num === '.' && value === '') {
+            setValue('0'.concat(num));
+        } else {
+            setValue(value.concat(num));
+        }
+
+        setDisplay(value.concat(num));
+        setLastButtonPressed('number');
+
+    }
+    const calculate = (value) => {
+        const numValue = parseFloat(value);
+        if (result === 0) {
+            setResult(numValue);
+            return;
+        }
+        switch (operation) {
+            case "-":
+                setResult(result - numValue);
+                break;
+            case "/":
+                setResult(result / numValue);
+                break;
+            case "+":
+                setResult(result + numValue);
+                break;
+            case "x":
+                setResult(result * numValue);
+                break;
+            case "=":
+                break;
+            default:
+                setResult(numValue);
+
+        }
+
+    };
+
+    const onClickOperation = (button) => {
+        if (button === "AC") {
+            setOperation("");
+            setResult(0);
+            setDisplay(0);
+        } else {
+            if (value !== "") calculate(value);
+            if (button === "=") setDisplay(result);
+            setOperation(button);
+        }
+        setValue("");
+        setLastButtonPressed(button === "AC" ? "number" : "operator");
+
+    }
+    useEffect(() => {
+        if (result % 1 === 0) {
+            setDisplay(result);
+        } else {
+            setDisplay(result.toFixed(4));
+        }
+    }, [result]);
 
 
 
+    console.log("value", value);
+    console.log("result", result);
+    console.log("operation", operation);
+    console.log("display", display)
+    console.log("------------");
 
     return (
         <Container fluid>
             <div style={styles.container}>
-                <div id="display" style={styles.display}>
-                    <p className="formular">Formular</p>
-                    <p className="result">{result}</p>
+                <div style={styles.display}>
+                    <p className="formular">{formular}</p>
+                    <p className="result" id="display">{display || '0'}</p>
                 </div>
                 <div className="button-container">
                     <div className="operatorListTop">
@@ -44,6 +118,7 @@ const Calculator = () => {
                                 id={name[0]}
                                 key={index}
                                 areaName={name[0]}
+                                onClickOperation={onClickOperation}
                             />)}
                     </div>
                     <div className="numberBtn">
@@ -53,6 +128,7 @@ const Calculator = () => {
                                 name={num[1]}
                                 areaName={num[0]}
                                 key={index}
+                                onClickNumber={onClickNumber}
                             />)}
                     </div>
                     <div className="operatorListRight">
@@ -61,6 +137,7 @@ const Calculator = () => {
                                 id={name[0]}
                                 name={name[1]}
                                 key={index}
+                                onClickOperation={onClickOperation}
                             />)}
                     </div>
                 </div>
