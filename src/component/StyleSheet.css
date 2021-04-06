@@ -17,29 +17,23 @@ body {
     gap: 2px;
     width: 200px;
 }
-.formular {
+.formular,
+.result {
     text-align: end;
     color: #ffffff;
-    grid-column: 1/5;
+    grid-column: 1/4;
     grid-row: 1/2;
     font-size: 1rem;
     margin: 2px;
     padding-right: 10px;
     display: flex;
     justify-content: flex-end;
-    
+    word-wrap: break-word;
+    word-break: break-all;
 }
 .result {
-    text-align: end;
-    color: #ffffff;
-    grid-column: 1/4;
-    grid-row: 1/2;
     font-size: 2rem;
-    margin: 2px;
-    padding-right: 10px;
-    display: flex;
-    justify-content: flex-end;
-
+    
 }
 
 

@@ -28,12 +28,35 @@ const Calculator = () => {
     const [result, setResult] = useState(0)
     const [operation, setOperation] = useState('')
     const [display, setDisplay] = useState(value)
-    const [lastButtonPressed, setLastButtonPressed] = useState("number");
+    // const [lastButtonPressed, setLastButtonPressed] = useState("");
     const [formular, setFormular] = useState('')
+    const [prevFormular, setPrevFormular] = useState(formular)
 
+    const getDisplayNumber = (num) => {
+        const stringNumber = num.toString()
+        const integerDigits = parseFloat(stringNumber.split('.')[0])
+        const decimalDigits = stringNumber.split('.')[1]
+        let integerDisplay
+        if (isNaN(integerDigits)) {
+            integerDisplay = ''
+        } else {
+            integerDisplay = integerDigits.toLocaleString('en', {
+                maximumFractionDigits: 0
+            })
+        }
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`
+        } else {
+            return integerDisplay
+        }
+        // const floatNumber = parseFloat(num)
+        // if (isNaN(floatNumber)) return ''
+        // return floatNumber.toLocaleString('en')
+    }
     const onClickNumber = (num) => {
+
         if (num === '0' && value === '0') return null;
-        if (num === '.' && value[value.length - 1] === '.') return;
+        if (num === '.' && value.includes('.')) return;
 
         if (num === '.' && value === '') {
             setValue('0'.concat(num));
@@ -41,10 +64,38 @@ const Calculator = () => {
             setValue(value.concat(num));
         }
 
+        if (formular !== '') setFormular(formular.concat(num))
         setDisplay(value.concat(num));
-        setLastButtonPressed('number');
+        // setLastButtonPressed('number');
+    }
+
+    const onClickOperation = (button) => {
+
+        if (button === "AC") {
+            setOperation("");
+            setResult(0);
+            setDisplay(0);
+            setFormular('');
+            setPrevFormular('');
+            setValue("");
+        } else {
+
+            if (value === '') return;
+            if (value !== '' && button !== '=') calculate(value);
+            setFormular(value.toString() + button.toString());
+            if (formular !== '' && prevFormular === '') setPrevFormular(formular);
+
+            // calculate(value);
+
+        }
+        if (button === "=") setDisplay(result);
+        setOperation(button);
+
+        setValue('')
+        // setLastButtonPressed(button === "AC" ? "number" : "operator");
 
     }
+
     const calculate = (value) => {
         const numValue = parseFloat(value);
         if (result === 0) {
@@ -73,20 +124,7 @@ const Calculator = () => {
 
     };
 
-    const onClickOperation = (button) => {
-        if (button === "AC") {
-            setOperation("");
-            setResult(0);
-            setDisplay(0);
-        } else {
-            if (value !== "") calculate(value);
-            if (button === "=") setDisplay(result);
-            setOperation(button);
-        }
-        setValue("");
-        setLastButtonPressed(button === "AC" ? "number" : "operator");
 
-    }
     useEffect(() => {
         if (result % 1 === 0) {
             setDisplay(result);
@@ -95,8 +133,8 @@ const Calculator = () => {
         }
     }, [result]);
 
-
-
+    console.log("prev-formular", prevFormular);
+    console.log("formular", formular);
     console.log("value", value);
     console.log("result", result);
     console.log("operation", operation);
@@ -108,7 +146,7 @@ const Calculator = () => {
             <div style={styles.container}>
                 <div style={styles.display}>
                     <p className="formular">{formular}</p>
-                    <p className="result" id="display">{display || '0'}</p>
+                    <p className="result" id="display">{getDisplayNumber(display) || '0'}</p>
                 </div>
                 <div className="button-container">
                     <div className="operatorListTop">
@@ -148,6 +186,7 @@ const Calculator = () => {
 
 const styles = {
     display: {
+        minHeight: '80px',
         backgroundColor: 'lightblue',
         margin: '2px 0',
         borderRadius: '5px',
