@@ -24,13 +24,11 @@ const operatorListTop = [["clear", "AC"], ["divide", "/"]];
 const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], ["equals", "="]];
 
 const Calculator = () => {
-    const [value, setValue] = useState('')
+    const [currentValue, setCurrentValue] = useState('')
     const [result, setResult] = useState(0)
     const [operation, setOperation] = useState('')
-    const [display, setDisplay] = useState(value)
-    // const [lastButtonPressed, setLastButtonPressed] = useState("");
-    const [formular, setFormular] = useState('')
-    const [prevFormular, setPrevFormular] = useState(formular)
+    const [display, setDisplay] = useState(currentValue)
+    const [lastButtonPressed, setLastButtonPressed] = useState("");
 
     const getDisplayNumber = (num) => {
         const stringNumber = num.toString()
@@ -49,55 +47,49 @@ const Calculator = () => {
         } else {
             return integerDisplay
         }
-        // const floatNumber = parseFloat(num)
-        // if (isNaN(floatNumber)) return ''
-        // return floatNumber.toLocaleString('en')
+
     }
     const onClickNumber = (num) => {
 
-        if (num === '0' && value === '0') return null;
-        if (num === '.' && value.includes('.')) return;
+        if (num === '0' && currentValue === '0') return null;
+        if (num === '.' && currentValue.includes('.')) return console.log('decimal already in there');
 
-        if (num === '.' && value === '') {
-            setValue('0'.concat(num));
+        if (num === '.' && currentValue === '') {
+            console.log('click decimal')
+            setCurrentValue('0'.concat(num));
         } else {
-            setValue(value.concat(num));
+            setCurrentValue(currentValue.concat(num));
         }
 
-        if (formular !== '') setFormular(formular.concat(num))
-        setDisplay(value.concat(num));
-        // setLastButtonPressed('number');
+
+        setDisplay(currentValue.concat(num));
+        setLastButtonPressed('number');
     }
 
     const onClickOperation = (button) => {
 
         if (button === "AC") {
-            setOperation("");
-            setResult(0);
+            setCurrentValue('')
             setDisplay(0);
-            setFormular('');
-            setPrevFormular('');
-            setValue("");
+            setResult(0);
+            setOperation('');
+
         } else {
+            if (currentValue !== '') calculate(currentValue)
+            setOperation(button)
+            if (button === '=') setDisplay(result);
 
-            if (value === '') return;
-            if (value !== '' && button !== '=') calculate(value);
-            setFormular(value.toString() + button.toString());
-            if (formular !== '' && prevFormular === '') setPrevFormular(formular);
-
-            // calculate(value);
 
         }
-        if (button === "=") setDisplay(result);
-        setOperation(button);
 
-        setValue('')
-        // setLastButtonPressed(button === "AC" ? "number" : "operator");
+        setCurrentValue('')
+        setOperation(button);
+        setLastButtonPressed(button === "AC" ? "number" : "operator");
 
     }
 
-    const calculate = (value) => {
-        const numValue = parseFloat(value);
+    const calculate = (currentValue) => {
+        const numValue = parseFloat(currentValue);
         if (result === 0) {
             setResult(numValue);
             return;
@@ -133,9 +125,8 @@ const Calculator = () => {
         }
     }, [result]);
 
-    console.log("prev-formular", prevFormular);
-    console.log("formular", formular);
-    console.log("value", value);
+
+    console.log("currentValue", currentValue);
     console.log("result", result);
     console.log("operation", operation);
     console.log("display", display)
@@ -145,7 +136,6 @@ const Calculator = () => {
         <Container fluid>
             <div style={styles.container}>
                 <div style={styles.display}>
-                    <p className="formular">{formular}</p>
                     <p className="result" id="display">{getDisplayNumber(display) || '0'}</p>
                 </div>
                 <div className="button-container">
