@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './StyleSheet.css';
 import NumberButtons from './NumberButtons';
 import OperatorButtons from './OperatorButtons';
-// import Formular from './Formular';
-// import Output from './Output';
 import { Container } from 'react-bootstrap';
 
 const numberList = [
@@ -25,10 +23,10 @@ const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], [
 
 const Calculator = () => {
     const [currentValue, setCurrentValue] = useState('')
-    const [result, setResult] = useState(0)
     const [operation, setOperation] = useState('')
-    const [display, setDisplay] = useState(currentValue)
     const [lastButtonPressed, setLastButtonPressed] = useState("");
+    const [data, setData] = useState({ result: 0, display: currentValue })
+
 
     const getDisplayNumber = (num) => {
         const stringNumber = num.toString()
@@ -43,7 +41,7 @@ const Calculator = () => {
             })
         }
         if (decimalDigits != null) {
-            return `${integerDisplay}.${decimalDigits}`
+            return `${integerDisplay}.${decimalDigits.length > 4 ? parseFloat(decimalDigits).toFixed(4) : decimalDigits}`
         } else {
             return integerDisplay
         }
@@ -52,7 +50,7 @@ const Calculator = () => {
     const onClickNumber = (num) => {
 
         if (num === '0' && currentValue === '0') return null;
-        if (num === '.' && currentValue.includes('.')) return console.log('decimal already in there');
+        if (num === '.' && currentValue.includes('.')) return;
 
         if (num === '.' && currentValue === '') {
             console.log('click decimal')
@@ -60,9 +58,7 @@ const Calculator = () => {
         } else {
             setCurrentValue(currentValue.concat(num));
         }
-
-
-        setDisplay(currentValue.concat(num));
+        setData({ ...data, display: currentValue.concat(num) })
         setLastButtonPressed('number');
     }
 
@@ -70,16 +66,17 @@ const Calculator = () => {
 
         if (button === "AC") {
             setCurrentValue('')
-            setDisplay(0);
-            setResult(0);
+            setData({ result: 0, display: 0 })
             setOperation('');
 
         } else {
             if (currentValue !== '') calculate(currentValue)
             setOperation(button)
-            if (button === '=') setDisplay(result);
-
-
+            if (button === '=') {
+                setData((prev) => {
+                    return { ...prev, display: prev.result }
+                })
+            }
         }
 
         setCurrentValue('')
@@ -90,53 +87,48 @@ const Calculator = () => {
 
     const calculate = (currentValue) => {
         const numValue = parseFloat(currentValue);
-        if (result === 0) {
-            setResult(numValue);
+        if (data.result === 0) {
+            setData({ result: numValue, display: numValue })
             return;
         }
+        let calcNum;
         switch (operation) {
             case "-":
-                setResult(result - numValue);
+                calcNum = data.result - numValue;
+                setData({ result: calcNum, display: calcNum })
                 break;
             case "/":
-                setResult(result / numValue);
+                calcNum = data.result / numValue;
+                setData({ result: calcNum, display: calcNum })
                 break;
             case "+":
-                setResult(result + numValue);
+                calcNum = data.result + numValue;
+                setData({ result: calcNum, display: calcNum })
                 break;
             case "x":
-                setResult(result * numValue);
+                calcNum = data.result * numValue;
+                setData({ result: calcNum, display: calcNum })
                 break;
             case "=":
                 break;
             default:
-                setResult(numValue);
+                setData({ result: numValue, display: numValue })
 
         }
 
     };
 
 
-    useEffect(() => {
-        if (result % 1 === 0) {
-            setDisplay(result);
-        } else {
-            setDisplay(result.toFixed(4));
-        }
-    }, [result]);
-
-
     console.log("currentValue", currentValue);
-    console.log("result", result);
     console.log("operation", operation);
-    console.log("display", display)
+    console.log("data", data)
     console.log("------------");
 
     return (
         <Container fluid>
             <div style={styles.container}>
                 <div style={styles.display}>
-                    <p className="result" id="display">{getDisplayNumber(display) || '0'}</p>
+                    <p className="result" id="display">{getDisplayNumber(data.display) || '0'}</p>
                 </div>
                 <div className="button-container">
                     <div className="operatorListTop">
