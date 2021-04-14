@@ -127,6 +127,7 @@ const Calculator = () => {
     return (
         <Container fluid>
             <div style={styles.container}>
+                <h1>Calculator</h1>
                 <div style={styles.display}>
                     <p className="result" id="display">{getDisplayNumber(data.display) || '0'}</p>
                 </div>
@@ -162,24 +163,33 @@ const Calculator = () => {
                     </div>
                 </div>
             </div>
+            <p>Coded by Kesinee</p>
         </Container>
     )
 }
 
 const styles = {
     display: {
-        minHeight: '80px',
+        minHeight: '40px',
+        padding: '10px 0',
         backgroundColor: 'lightblue',
-        margin: '2px 0',
+        margin: '5px 0',
         borderRadius: '5px',
-        width: '200px'
+        width: '230px',
+        boxShadow: '1px 1px 3px grey',
     },
     container: {
-        width: '200px',
+        width: '250px',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
         margin: '0 auto',
-        marginTop: '10%'
+        marginTop: '10%',
+        border: '1px solid darkgrey',
+        borderRadius: '10px',
+        boxShadow: '2px 2px 5px grey',
+        padding: '9px',
+        backgroundColor: '#effcf7'
     },
 }
 export default Calculator;
