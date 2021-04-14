@@ -58,6 +58,7 @@ const Calculator = () => {
         } else {
             setCurrentValue(currentValue.concat(num));
         }
+
         setData({ ...data, display: currentValue.concat(num) })
         setLastButtonPressed('number');
     }
@@ -69,6 +70,8 @@ const Calculator = () => {
             setData({ result: 0, display: 0 })
             setOperation('');
 
+        } else if (button === '-' && currentValue === '') {
+            console.log('substraction click')
         } else {
             if (currentValue !== '') calculate(currentValue)
             setOperation(button)
@@ -121,6 +124,7 @@ const Calculator = () => {
 
     console.log("currentValue", currentValue);
     console.log("operation", operation);
+    console.log("lastbutton", lastButtonPressed)
     console.log("data", data)
     console.log("------------");
 
