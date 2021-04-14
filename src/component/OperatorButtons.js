@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/Button';
 const OperatorButtons = ({ name, id, areaName, onClickOperation }) => {
     const style = {
         default: {
-            gridArea: areaName
+            gridArea: areaName,
+            boxShadow: '1px 1px 3px grey',
         }
     }
     return (

@@ -6,7 +6,8 @@ import Button from 'react-bootstrap/Button';
 const NumberButtons = ({ name, areaName, onClickNumber, id }) => {
     const style = {
         default: {
-            gridArea: areaName
+            gridArea: areaName,
+            boxShadow: '1px 1px 3px grey',
         }
     }
     return (
