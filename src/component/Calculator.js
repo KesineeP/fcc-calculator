@@ -18,14 +18,15 @@ const numberList = [
     ["nine", "9"],
     ["decimal", "."]
 ];
-const operatorListTop = [["clear", "AC"], ["divide", "/"]];
+const operatorListTop = [["clear", "AC"], ["divide", "÷"]];
 const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], ["equals", "="]];
 
 const Calculator = () => {
-    const [currentValue, setCurrentValue] = useState('')
-    const [operation, setOperation] = useState('')
+    const [currentValue, setCurrentValue] = useState('');
+    const [prevOperand, setPrevOperand] = useState('');
+    const [operation, setOperation] = useState('');
     const [lastButtonPressed, setLastButtonPressed] = useState("");
-    const [data, setData] = useState({ result: 0, display: currentValue })
+    const [data, setData] = useState({ result: 0, display: currentValue });
 
 
     const getDisplayNumber = (num) => {
@@ -48,18 +49,17 @@ const Calculator = () => {
 
     }
     const onClickNumber = (num) => {
-
         if (num === '0' && currentValue === '0') return null;
         if (num === '.' && currentValue.includes('.')) return;
 
         if (num === '.' && currentValue === '') {
-            console.log('click decimal')
             setCurrentValue('0'.concat(num));
         } else {
             setCurrentValue(currentValue.concat(num));
         }
 
         setData({ ...data, display: currentValue.concat(num) })
+        setPrevOperand(prevOperand.concat(num))
         setLastButtonPressed('number');
     }
 
@@ -69,20 +69,21 @@ const Calculator = () => {
             setCurrentValue('')
             setData({ result: 0, display: 0 })
             setOperation('');
+            setPrevOperand('')
 
-        } else if (button === '-' && currentValue === '') {
-            console.log('substraction click')
         } else {
             if (currentValue !== '') calculate(currentValue)
             setOperation(button)
+            setPrevOperand(prevOperand.concat(button))
             if (button === '=') {
                 setData((prev) => {
                     return { ...prev, display: prev.result }
                 })
+                setPrevOperand(prevOperand.concat(''))
             }
         }
 
-        setCurrentValue('')
+        setCurrentValue('');
         setOperation(button);
         setLastButtonPressed(button === "AC" ? "number" : "operator");
 
@@ -90,17 +91,19 @@ const Calculator = () => {
 
     const calculate = (currentValue) => {
         const numValue = parseFloat(currentValue);
+
         if (data.result === 0) {
             setData({ result: numValue, display: numValue })
             return;
         }
+
         let calcNum;
         switch (operation) {
             case "-":
                 calcNum = data.result - numValue;
                 setData({ result: calcNum, display: calcNum })
                 break;
-            case "/":
+            case "÷":
                 calcNum = data.result / numValue;
                 setData({ result: calcNum, display: calcNum })
                 break;
@@ -115,13 +118,12 @@ const Calculator = () => {
             case "=":
                 break;
             default:
-                setData({ result: numValue, display: numValue })
-
+                return;
         }
 
     };
 
-
+    console.log("prevOperand", prevOperand);
     console.log("currentValue", currentValue);
     console.log("operation", operation);
     console.log("lastbutton", lastButtonPressed)
@@ -133,6 +135,7 @@ const Calculator = () => {
             <div style={styles.container}>
                 <h1>Calculator</h1>
                 <div style={styles.display}>
+                    <span className="formula">{prevOperand}</span>
                     <p className="result" id="display">{getDisplayNumber(data.display) || '0'}</p>
                 </div>
                 <div className="button-container">

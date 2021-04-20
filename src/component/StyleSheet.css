@@ -22,6 +22,15 @@ body {
     gap: 4px;
     width: 230px;
 }
+.formula {
+    min-height: 30px;
+    display:flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+    margin: 2px;
+    color: #ffffff;
+    font-size: 1.5rem;
+}
 .result {
     text-align: end;
     color: #ffffff;
