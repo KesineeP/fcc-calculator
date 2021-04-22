@@ -24,7 +24,6 @@ const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], [
 const Calculator = () => {
     const [currentValue, setCurrentValue] = useState('');
     const [prevOperand, setPrevOperand] = useState('');
-    const [prevValue, setPrevValue] = useState('');
     const [operation, setOperation] = useState('');
     const [lastButtonPressed, setLastButtonPressed] = useState("");
     const [data, setData] = useState({ result: 0, display: currentValue });
@@ -59,7 +58,6 @@ const Calculator = () => {
         } else {
             setCurrentValue(currentValue.concat(num));
         }
-
         setData({ ...data, display: currentValue.concat(num) })
         setPrevOperand(`${prevOperand}${num}`)
         setLastButtonPressed('number');
@@ -67,7 +65,6 @@ const Calculator = () => {
     }
 
     const onClickOperation = (button) => {
-
         let newInput = undefined;
         if (button === "AC") {
             setCurrentValue('')
@@ -100,7 +97,9 @@ const Calculator = () => {
                     return { ...prev, display: prev.result }
                 })
                 setPrevOperand(`${prevOperand} `)
-                setCurrentValue(safeEval(newInput))
+                if (prevOperand[prevOperand.length - 2] === '-') {
+                    setCurrentValue(safeEval(newInput))
+                } else return;
             }
 
         }
