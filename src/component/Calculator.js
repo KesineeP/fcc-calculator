@@ -24,6 +24,7 @@ const operatorListRight = [["multiply", "x"], ["subtract", "-"], ["add", "+"], [
 const Calculator = () => {
     const [currentValue, setCurrentValue] = useState('');
     const [prevOperand, setPrevOperand] = useState('');
+    const [prevValue, setPrevValue] = useState('');
     const [operation, setOperation] = useState('');
     const [lastButtonPressed, setLastButtonPressed] = useState("");
     const [data, setData] = useState({ result: 0, display: currentValue });
@@ -50,6 +51,7 @@ const Calculator = () => {
     }
     const onClickNumber = (num) => {
         if (num === '0' && currentValue === '0') return null;
+        if (num === '0' && prevOperand === '') return null;
         if (num === '.' && currentValue.includes('.')) return;
 
         if (num === '.' && currentValue === '') {
@@ -59,35 +61,99 @@ const Calculator = () => {
         }
 
         setData({ ...data, display: currentValue.concat(num) })
-        setPrevOperand(prevOperand.concat(num))
+        setPrevOperand(`${prevOperand}${num}`)
         setLastButtonPressed('number');
+
     }
 
     const onClickOperation = (button) => {
 
+        let newInput = undefined;
         if (button === "AC") {
             setCurrentValue('')
             setData({ result: 0, display: 0 })
             setOperation('');
             setPrevOperand('')
+        } else if (lastButtonPressed !== 'number') {
+            if (button === '-') {
+                setCurrentValue('-');
+                setPrevOperand(`${prevOperand}-`)
 
+            } else if (button !== '-') {
+                newInput = prevOperand.endsWith("-")
+                    ? prevOperand.substring(0, prevOperand.length - 4)
+                    : prevOperand.substring(0, prevOperand.length - 3);
+                setPrevOperand(`${newInput} ${button} `);
+
+            }
         } else {
             if (currentValue !== '') calculate(currentValue)
             setOperation(button)
-            setPrevOperand(prevOperand.concat(button))
+            setPrevOperand(`${prevOperand} ${button} `)
+            if (prevOperand.endsWith('-')) {
+                newInput = prevOperand.substring(0, prevOperand.length - 4);
+                setPrevOperand(newInput)
+
+            }
             if (button === '=') {
                 setData((prev) => {
                     return { ...prev, display: prev.result }
                 })
-                setPrevOperand(prevOperand.concat(''))
+                setPrevOperand(`${prevOperand} `)
+                setCurrentValue(safeEval(newInput))
             }
-        }
 
+        }
         setCurrentValue('');
         setOperation(button);
         setLastButtonPressed(button === "AC" ? "number" : "operator");
 
     }
+
+    const safeEval = (newInput) => {
+        if (!prevOperand) {
+            return currentValue;
+        }
+        const inputArray = newInput ? newInput.split(" ") : prevOperand.split(" ");
+        const numbers = [];
+        const operators = [];
+
+        for (let i = 0; i < inputArray.length; i++) {
+            if (!isNaN(inputArray[i])) {
+                numbers.push(parseFloat(inputArray[i]));
+            } else if (inputArray[i].match(/^(\+|-|x|÷)$/)) {
+                operators.push(inputArray[i]);
+            }
+        }
+        const reducer = (result, numValue, index) => {
+            let calcNum;
+            switch (operators[index - 1]) {
+                case "-":
+                    calcNum = result - numValue;
+                    setData({ result: calcNum, display: calcNum })
+                    break;
+                case "÷":
+                    calcNum = result / numValue;
+                    setData({ result: calcNum, display: calcNum })
+                    break;
+                case "+":
+                    calcNum = result + numValue;
+                    setData({ result: calcNum, display: calcNum })
+                    break;
+                case "x":
+                    calcNum = result * numValue;
+                    setData({ result: calcNum, display: calcNum })
+                    break;
+                case "=":
+                    break;
+                default:
+                    return;
+            }
+        };
+
+        return numbers.reduce(reducer);
+    };
+
 
     const calculate = (currentValue) => {
         const numValue = parseFloat(currentValue);
@@ -124,6 +190,7 @@ const Calculator = () => {
     };
 
     console.log("prevOperand", prevOperand);
+    console.log("prevValue", prevValue);
     console.log("currentValue", currentValue);
     console.log("operation", operation);
     console.log("lastbutton", lastButtonPressed)
