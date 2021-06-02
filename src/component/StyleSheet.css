@@ -1,14 +1,12 @@
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 body {
-    background: linear-gradient( #aff0ba, #8099b8);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+  background: linear-gradient(#aff0ba, #8099b8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 /* .container-fluid {
     height: 100vh;
@@ -16,76 +14,76 @@ body {
 
 } */
 .button-container {
-    display: grid;
-    grid-template-rows: repeat(5, 1fr);
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    width: 230px;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 230px;
 }
 .formula {
-    min-height: 30px;
-    display:flex;
-    justify-content: flex-end;
-    padding-right: 10px;
-    margin: 2px;
-    color: #ffffff;
-    font-size: 1.5rem;
+  min-height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+  margin: 2px;
+  color: #ffffff;
+  font-size: 1.5rem;
 }
 .result {
-    text-align: end;
-    color: #ffffff;
-    grid-column: 1/4;
-    grid-row: 1/2;
-    font-size: 1vw;
-    margin: 2px;
-    padding-right: 10px;
-    display: flex;
-    justify-content: flex-end;
-    word-wrap: break-word;
-    word-break: break-all;
-  
+  text-align: end;
+  color: #ffffff;
+  grid-column: 1/4;
+  grid-row: 1/2;
+  font-size: 1vw;
+  margin: 2px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: flex-end;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 .result {
-    font-size: 2rem;
-    
+  font-size: 2rem;
 }
-
 
 .operatorListTop {
-    display: inline-grid;
-    grid-template-rows: repeat(1, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    grid-column: 1/4;
-    grid-row: 1/2;
-    gap: 4px;
-    grid-template-areas: 
-    "clear clear divide";
-    
+  display: inline-grid;
+  grid-template-rows: repeat(1, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-column: 1/4;
+  grid-row: 1/2;
+  gap: 4px;
+  grid-template-areas: "clear clear divide";
 }
 .operatorListRight {
-    display: inline-grid;
-    grid-template-rows: repeat(1, 1fr 1fr 1fr 2fr);
-    grid-template-columns: 1fr;
-    grid-column: 4/5;
-    grid-row: 1/7;
-    gap: 4px;
-    
+  display: inline-grid;
+  grid-template-rows: repeat(1, 1fr 1fr 1fr 2fr);
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-areas:
+    "multiply"
+    "subtract"
+    "add"
+    "equals";
+  grid-column: 4/5;
+  grid-row: 1/7;
+  gap: 4px;
 }
 
 .numberBtn {
-    display: inline-grid;
-    grid-template-rows: repeat(4, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-areas:
+  display: inline-grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
     "seven eight nine"
     "four five six"
     "one two three"
     "zero zero decimal";
-    grid-column: 1/4;
-    grid-row: 2/7;
-    gap: 4px;
-    margin: 0;
+  grid-column: 1/4;
+  grid-row: 2/7;
+  gap: 4px;
+  margin: 0;
 }
-h1, p {
-   color: #565e5e;
+h1,
+p {
+  color: #565e5e;
 }
